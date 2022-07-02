@@ -13,6 +13,11 @@ public class BSTImplementation {
         binarySearchTree.insert(150);
 
         System.out.println("binarySearchTree.search(150) = " + binarySearchTree.search(150));
+        System.out.println("\ninorder");
         binarySearchTree.inorder(binarySearchTree.getRoot());
+        System.out.println("\npreorder");
+        binarySearchTree.preorder(binarySearchTree.getRoot());
+        System.out.println("\npostorder");
+        binarySearchTree.postorder(binarySearchTree.getRoot());
     }
 }
