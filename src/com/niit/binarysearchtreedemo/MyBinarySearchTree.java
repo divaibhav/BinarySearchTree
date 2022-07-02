@@ -85,6 +85,124 @@ public class MyBinarySearchTree {
         }
     }
     // delete
+    public boolean delete(int deletingElement){
+        boolean response = false;
+        if(!isEmpty()) {
+            Node currentNode = root;
+            Node parent = null;
+            //locating deleting element
+            while (currentNode != null && currentNode.getData() != deletingElement) {
+                parent = currentNode;
+                if(deletingElement < currentNode.getData()){
+                    //left child
+                    currentNode = currentNode.getLeft();
+                }
+                else{
+                    currentNode = currentNode.getRight();
+                }
+            }
+            //if deleting element not present, then next line will not execute
+            if(currentNode != null){
+                response = true;
+                //case 1 : leaf node
+                if(isLeaf(currentNode)){
+                    //root case
+                    if(parent == null){
+                        root = null;
+                    }
+                    else {
+                        // updating parent
+                        if (deletingElement < parent.getData()) {
+                            parent.setLeft(null);
+                        } else {
+                            parent.setRight(null);
+                        }
+                    }
+                }
+                // case 2: single child either right or left
+                // first exploring left child case
+                else if(hasLeftChild(currentNode)){
+                    //root
+                    if(parent == null){
+                        root = currentNode.getLeft();
+                    }
+                    else{
+                        //checking whether deleting element is left or right child
+                        if(deletingElement < parent.getData()){
+                            parent.setLeft(currentNode.getLeft());
+                        }
+                        else{
+                            parent.setRight(currentNode.getLeft());
+                        }
+                    }
+                }
+                else if(hasRightChild(currentNode)){
+                    //root
+                    if(parent == null){
+                        //updating the root
+                        root = currentNode.getRight();
+                    }
+                    else {
+                        //checking whether deleting element is left or right child of parent
+                        if(deletingElement < parent.getData()){
+                            parent.setLeft(currentNode.getRight());
+                        }
+                        else{
+                            parent.setRight(currentNode.getRight());
+                        }
+                    }
+                }
+                //case 3 : two child
+                else{
+                    Node inorderSuccessor = getSuccessor(currentNode);
+                    //delete successor
+                    delete(inorderSuccessor.getData());
+                    //deleting currentNode
+                    // deleting by updating data
+                    currentNode.setData(inorderSuccessor.getData());
+                    /*// root case
+                    inorderSuccessor.setLeft(currentNode.getLeft());
+                    inorderSuccessor.setRight(currentNode.getRight());
+                    if(parent == null){
+                        // deleting root
+
+                        root = inorderSuccessor;
+                    }
+                    else {
+                        // non root case
+                        if(deletingElement < parent.getData()){
+                            parent.setLeft(inorderSuccessor);
+                        }
+                        else{
+                            parent.setRight(inorderSuccessor);
+                        }
+                    }*/
+                }
+            }
+        }
+       return response;
+    }
+
+    private Node getSuccessor(Node currentNode) {
+
+        Node  temp = currentNode.getRight();
+        while(temp.getLeft() != null){
+            temp = temp.getLeft();
+        }
+        return temp;
+    }
+
+    private boolean hasRightChild(Node currentNode) {
+        return currentNode.getRight() != null && currentNode.getLeft() == null;
+    }
+
+    private boolean hasLeftChild(Node currentNode) {
+        return currentNode.getLeft() != null && currentNode.getRight() == null;
+    }
+
+    private boolean isLeaf(Node currentNode) {
+        return currentNode.getLeft() == null && currentNode.getRight() == null;
+    }
 
 
     public Node getRoot() {
